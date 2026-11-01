@@ -7,8 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Unzip project
-        run: unzip -q Waqtak-android.zip
+        with:
+          fetch-depth: 0
+      - name: Unzip newest project zip
+        run: |
+          ZIP=$(git -c core.quotepath=false log -1 --name-only --diff-filter=AM --format= -- '*.zip' | head -n 1)
+          echo "Building from: $ZIP"
+          unzip -q -o "$ZIP"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
